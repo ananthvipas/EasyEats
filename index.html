@@ -989,6 +989,21 @@
                         });
                         return;
                     }
+                } else if (voiceContext.type === 'confirm_checkout') {
+                    if (command.includes('yes') || command.includes('sure') || command.includes('place') || command.includes('okay')) {
+                        executeCheckout();
+                        voiceContext = null;
+                        return;
+                    } else if (command.includes('no') || command.includes('cancel') || command.includes('don\'t')) {
+                        speak('Checkout cancelled. You can continue shopping.');
+                        voiceContext = null;
+                        return;
+                    } else {
+                        speak('Please say Yes to place order, or No to cancel.', () => {
+                            if (recognition) try { recognition.start(); } catch (e) { }
+                        });
+                        return;
+                    }
                 }
             }
 
@@ -1028,7 +1043,19 @@
             } else if (command.includes('help')) {
                 showHelp();
             } else {
-                speak('Sorry, I didn\'t understand that command. Say help for available commands.');
+                // Fallback: Hint-based search (Implicit search)
+                // Check if the command matches any item name or category
+                const potentialSearch = menuItems.filter(item =>
+                    item.name.toLowerCase().includes(command) ||
+                    item.category.toLowerCase().includes(command) ||
+                    item.description.toLowerCase().includes(command)
+                );
+
+                if (potentialSearch.length > 0) {
+                    searchItems(command);
+                } else {
+                    speak('Sorry, I didn\'t understand that command. Say help for available commands.');
+                }
             }
         }
 
@@ -1123,21 +1150,31 @@
             const helpText = `Available voice commands: 
                 Say "show menu" to view the menu. 
                 Say "show cart" to view your cart. 
-                Say "show settings" for settings. 
-                Say "add" followed by an item name to add it to cart. 
-                Say "checkout" to complete your order. 
-                Say "clear cart" to empty your cart.`;
+                Say any item name like "Pizza" or "Dosa" to find it.
+                Say "add" followed by an item name to add it. 
+                Say "remove" followed by an item name to remove it.
+                Say "checkout" to place your order.`;
             speak(helpText);
             updateStatus('Help: See available voice commands above', false);
         }
 
-        // Checkout
+        // Checkout (Confirmation Wrapper)
         function checkout() {
             if (cart.length === 0) {
                 speak('Your cart is empty. Please add items before checking out.');
                 return;
             }
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const message = `Your total is ₹${total.toFixed(2)}. Do you want to place the order?`;
+            voiceContext = { type: 'confirm_checkout' };
+            speak(message, () => {
+                if (recognition) try { recognition.start(); } catch (e) { }
+            });
+            updateStatus(`Confirm Checkout: Total ₹${total.toFixed(2)}. Say 'Yes' or 'No'.`, false);
+        }
 
+        // Execute Checkout (Actual Action)
+        function executeCheckout() {
             const total = cart.reduce((sum, item) => sum + item.price, 0);
             const count = cart.length;
             speak(`Processing checkout. Your order of ${count} item${count !== 1 ? 's' : ''} totaling ₹${total.toFixed(2)} has been placed. Thank you for your order!`);
