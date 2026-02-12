@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="159" height="49" fill="none" viewBox="0 0 159 49" xmlns:bx="https://boxy-svg.com">
+  <text style="fill: rgb(255, 79, 0); font-family: &quot;Agbalumo&quot;; font-size: 23px; font-weight: 700; white-space: pre;" transform="matrix(1.528594, 0, 0, 1.74809, -40.032272, -20.884075)" x="37.618" y="33.886">FooDaY</text>
+  <defs>
+    <style bx:fonts="Agbalumo">@import url(https://fonts.googleapis.com/css2?family=Agbalumo%3Aital%2Cwght%400%2C400&amp;display=swap);</style>
+    <path style="fill: none;" id="path-0" d="M 118.762 63.062 L 118.627 62.657 C 118.627 62.053 118.357 61.623 118.357 61.036"/>
+    <path style="fill: none;" id="path-1" d="M 91.883 61.171 C 93.708 58.67 94.295 56.231 96.205 54.958 L 96.475 54.958 L 96.746 54.687"/>
+  </defs>
+  <text style="fill: rgb(51, 51, 51); font-family: &quot;Arial&quot;, sans-serif; font-size: 28px; white-space: pre;"><textPath href="#path-0">Enter yo</textPath></text>
+  <text style="fill: rgb(51, 51, 51); font-family: &quot;Arial&quot;, sans-serif; font-size: 28px; white-space: pre;"><textPath href="#path-1">Enter your text</textPath></text>
+</svg>
